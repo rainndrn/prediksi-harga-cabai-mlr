@@ -882,7 +882,7 @@ st.download_button(
 
 )
 
-    st.info("""
+st.info("""
 
 **Catatan**
 
