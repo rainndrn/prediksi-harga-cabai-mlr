@@ -235,7 +235,7 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-    st.write("")
+st.write("")
 
     col1, col2, col3 = st.columns(3)
 
