@@ -434,6 +434,9 @@ if selected == "Dataset":
 
     )
 
+# ==========================================
+# UPLOAD DATASET
+# ==========================================
 uploaded_file = st.file_uploader(
     "📂 Upload Dataset Baru",
     type=["csv"]
@@ -448,87 +451,74 @@ st.info("""
 ### Ketentuan Dataset
 
 Dataset yang diunggah harus memenuhi persyaratan berikut:
-
-• Format file **CSV (.csv)**
-
-• Memiliki kolom:
-
-- hari_ke
-- tanggal_lengkap
-- cabe_rawit_merah
-- lag_1
-- lag_3
-- lag_7
-- ma_7
-
-• Tidak terdapat nilai kosong (missing value)
-
-• Format tanggal menggunakan YYYY-MM-DD
+1. Format file **CSV (.csv)**
+2. Memiliki kolom:
+    - hari_ke
+    - tanggal_lengkap
+    - cabe_rawit_merah
+    - lag_1
+    - lag_3
+    - lag_7
+    - ma_7
+3. Tidak terdapat nilai kosong (missing value)
+4. Format tanggal menggunakan YYYY-MM-DD
+Catatan: Dataset yang diunggah harus memiliki seluruh variabel yang digunakan oleh model. Dashboard tidak melakukan proses pembentukan fitur secara otomatis.
 
 """)
 required_columns = [
-
     "hari_ke",
-
     "tanggal_lengkap",
-
     "cabe_rawit_merah",
-
     "lag_1",
-
     "lag_3",
-
     "lag_7",
-
     "ma_7"
-
 ]
 if uploaded_file is not None:
-
     df_upload = pd.read_csv(uploaded_file)
-
     if all(col in df_upload.columns for col in required_columns):
-
         st.success("✅ Struktur dataset sesuai.")
-
     else:
-
         st.error("❌ Kolom dataset tidak sesuai.")
 if uploaded_file is not None:
-
     st.subheader("Preview Dataset")
-
     st.dataframe(
         df_upload,
         use_container_width=True
     )
 if uploaded_file is not None:
-
     col1,col2,col3,col4 = st.columns(4)
-
     with col1:
         st.metric(
             "Jumlah Data",
             len(df_upload)
         )
-
     with col2:
         st.metric(
             "Jumlah Kolom",
             len(df_upload.columns)
         )
-
     with col3:
         st.metric(
             "Tanggal Awal",
             df_upload["tanggal_lengkap"].min()
         )
-
     with col4:
         st.metric(
             "Tanggal Akhir",
             df_upload["tanggal_lengkap"].max()
         )
+
+if st.button("🚀 Gunakan Dataset"):
+
+    st.session_state["dataset"] = df_upload
+
+    st.success("Dataset berhasil digunakan.")
+if "dataset" not in st.session_state:
+
+    st.session_state["dataset"] = df
+
+
 
 # ==========================================
 # MENU VISUALISASI
@@ -821,7 +811,77 @@ Y=
 +
 1.078612(MA7)
 ''')
-            
+
+df = st.session_state["dataset"]
+X_upload = df_upload[
+    [
+        "hari_ke",
+        "lag_1",
+        "lag_3",
+        "lag_7",
+        "ma_7"
+    ]
+]
+
+prediksi = model.predict(X_upload)
+hasil = df_upload.copy()
+
+hasil["Prediksi"] = prediksi
+from sklearn.metrics import (
+    mean_squared_error,
+    mean_absolute_percentage_error,
+    r2_score
+)
+
+rmse = np.sqrt(
+    mean_squared_error(
+        hasil["cabe_rawit_merah"],
+        hasil["Prediksi"]
+    )
+)
+
+mape = mean_absolute_percentage_error(
+    hasil["cabe_rawit_merah"],
+    hasil["Prediksi"]
+) * 100
+
+r2 = r2_score(
+    hasil["cabe_rawit_merah"],
+    hasil["Prediksi"]
+)
+col1,col2,col3 = st.columns(3)
+
+with col1:
+    st.metric("RMSE",f"{rmse:,.2f}")
+
+with col2:
+    st.metric("MAPE",f"{mape:.2f}%")
+
+with col3:
+    st.metric("R²",f"{r2:.4f}")
+grafik = hasil[
+    [
+        "tanggal_lengkap",
+        "cabe_rawit_merah",
+        "Prediksi"
+    ]
+].set_index("tanggal_lengkap")
+
+st.line_chart(grafik)
+csv = hasil.to_csv(index=False).encode("utf-8")
+
+st.download_button(
+
+    "⬇ Download Hasil Prediksi",
+
+    csv,
+
+    file_name="hasil_prediksi.csv",
+
+    mime="text/csv"
+
+)
+
     st.info("""
 
 **Catatan**
