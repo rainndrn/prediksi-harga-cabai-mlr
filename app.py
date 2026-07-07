@@ -186,8 +186,7 @@ if selected == "Home":
     # HEADER
     # =========================
 
-    st.markdown(
-        f"""
+    st.markdown("""
     <div class="card">
 
         <div class="big-font">
