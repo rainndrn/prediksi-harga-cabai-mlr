@@ -1019,18 +1019,6 @@ Dashboard dibuat menggunakan:
     st.warning("""
 
 Dashboard ini merupakan implementasi model penelitian.
-
-Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis yang diperlukan untuk membentuk variabel:
-
-    • hari_ke
-
-    • lag-1
-
-    • lag-3
-    
-    • lag-7
-    
-    • MA7
     
 Dashboard belum dapat melakukan prediksi untuk tanggal di luar rentang data penelitian.
 
