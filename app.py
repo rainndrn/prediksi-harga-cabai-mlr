@@ -900,7 +900,7 @@ if selected == "Prediksi":
     with col2:
         st.metric(
             "APE",
-            f"{persen:.2f}%"
+            f"{ape:.2f}%"
         )
 
     st.subheader("📐 Persamaan Model")
