@@ -786,6 +786,13 @@ pembangunan model Multiple Linear Regression.
 
 if selected == "Prediksi":
 
+    df = st.session_state.dataset
+
+    df["tanggal_lengkap"] = pd.to_datetime(df["tanggal_lengkap"])
+
+    min_date = df["tanggal_lengkap"].min().date()
+    max_date = df["tanggal_lengkap"].max().date()
+
     st.title("🔮 Prediksi Harga Cabai Rawit Merah")
 
     st.write("""
@@ -793,33 +800,24 @@ if selected == "Prediksi":
     cabai rawit merah menggunakan model Multiple Linear Regression.
     """)
 
-    st.divider()
-
     st.info(f"""
-    📅 Periode dataset aktif :
-    
+    📅 **Periode Dataset Aktif**
+
     **{min_date.strftime('%d-%m-%Y')}**
     s.d.
     **{max_date.strftime('%d-%m-%Y')}**
-    
-    Silakan pilih salah satu tanggal pada rentang tersebut untuk melakukan prediksi.
+
+    Silakan pilih tanggal pada rentang tersebut untuk melakukan prediksi.
     """)
 
-    # Menggunakan dataset aktif
-    df = st.session_state.dataset
-
-    # Pastikan kolom tanggal bertipe datetime
-    df["tanggal_lengkap"] = pd.to_datetime(df["tanggal_lengkap"])
-    
-    min_date = df["tanggal_lengkap"].min().date()
-    max_date = df["tanggal_lengkap"].max().date()
+    st.divider()
 
     tanggal = st.date_input(
     "📅 Pilih Tanggal",
     value=max_date,
     min_value=min_date,
     max_value=max_date
-)
+    )
     data = df[df["tanggal_lengkap"].dt.date == tanggal]
     if data.empty:
         st.error("Data untuk tanggal tersebut belum tersedia.")
@@ -930,26 +928,26 @@ Y=
 1.078612(MA7)
 ''')
 
-        st.info("""
-        
-        **Catatan**
-        
-        Dashboard ini menggunakan model Multiple Linear Regression dengan
-        variabel **hari_ke**, **lag-1**, **lag-3**, **lag-7**, dan
-        **Moving Average 7 Hari (MA7)**.
-        
-        Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis
-        yang diperlukan untuk membentuk variabel tersebut.
-        
-        Dashboard ini belum dapat melakukan prediksi pada tanggal di luar
-        rentang data penelitian.
-        
-        Pengembangan lebih lanjut dapat dilakukan dengan mengintegrasikan
-        dashboard dengan sumber data harga harian sehingga proses pembentukan
-        variabel historis dapat dilakukan secara otomatis dan prediksi untuk
-        hari berikutnya dapat dihasilkan.
-        
-        """)
+    st.info("""
+
+    **Catatan**
+
+    Dashboard ini menggunakan model Multiple Linear Regression dengan
+    variabel **hari_ke**, **lag-1**, **lag-3**, **lag-7**, dan
+    **Moving Average 7 Hari (MA7)**.
+
+    Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis
+    yang diperlukan untuk membentuk variabel tersebut.
+
+    Dashboard ini belum dapat melakukan prediksi pada tanggal di luar
+    rentang data penelitian.
+
+    Pengembangan lebih lanjut dapat dilakukan dengan mengintegrasikan
+    dashboard dengan sumber data harga harian sehingga proses pembentukan
+    variabel historis dapat dilakukan secara otomatis dan prediksi untuk
+    hari berikutnya dapat dihasilkan.
+
+    """)
 
 # ==========================================
 # MENU TENTANG
