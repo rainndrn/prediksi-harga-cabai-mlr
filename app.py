@@ -192,6 +192,20 @@ if selected == "Home":
             🌶️ Prediksi Harga Cabai Rawit Merah
         </div>
 
+        <div style="margin-top:15px;">
+        <span style="background:#d62828;color:white;padding:6px 12px;border-radius:20px;">
+        🌶️ Multiple Linear Regression
+        </span>
+
+        <span style="background:#f8f9fa;padding:6px 12px;border-radius:20px;margin-left:8px;">
+        📅 2023–2025
+        </span>
+
+        <span style="background:#f8f9fa;padding:6px 12px;border-radius:20px;margin-left:8px;">
+        📊 1087 Data
+        </span>
+        </div>
+        
         <div class="sub-font">
             Dashboard implementasi model
             <b style="color:#d62828;">
