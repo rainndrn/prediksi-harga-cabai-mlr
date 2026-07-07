@@ -805,21 +805,12 @@ Y=
 df = st.session_state["dataset"]
 df_prediksi = st.session_state.dataset
 X_upload = df_prediksi[
-    [
         "hari_ke",
         "lag_1",
         "lag_3",
         "lag_7",
         "ma_7"
     ]
-]
-        "hari_ke",
-        "lag_1",
-        "lag_3",
-        "lag_7",
-        "ma_7"
-    ]
-]
 
 prediksi = model.predict(X_upload)
 hasil = df_upload.copy()
