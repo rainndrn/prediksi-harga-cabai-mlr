@@ -36,13 +36,28 @@ model = load_model()
 
 @st.cache_data
 def load_data():
+
     df = pd.read_csv(
         "data/dataset_cabe_rawit_merah.csv",
         parse_dates=["tanggal_lengkap"]
     )
+
+    df["tanggal_lengkap"] = pd.to_datetime(
+        df["tanggal_lengkap"]
+    )
+
     return df
 
+
+# Dataset awal
 df = load_data()
+
+
+# Dataset aktif
+if "dataset" not in st.session_state:
+    st.session_state.dataset = df
+
+df = st.session_state.dataset
 
 # ==========================================
 # CSS
@@ -423,23 +438,15 @@ if selected == "Dataset":
 
     )
 
+
 # ==========================================
-# UPLOAD DATASET
+# UPLOAD DATASET BARU
 # ==========================================
-    uploaded_file = st.file_uploader(
-        "📂 Upload Dataset Baru",
-        type=["csv"]
-    )
-    if uploaded_file is not None:
-        df_upload = pd.read_csv(uploaded_file)
-        st.dataframe(df_upload)
-        if st.button("Gunakan Dataset"):
-            st.session_state.dataset = df_upload
-            st.success("Dataset berhasil diupload.")
+
+    st.subheader("📂 Upload Dataset Baru")
+
     st.info("""
-    
-    ### Ketentuan Dataset
-    
+    **Ketentuan Dataset**
     Dataset yang diunggah harus memenuhi persyaratan berikut:
     1. Format file **CSV (.csv)**
     2. Memiliki kolom:
@@ -452,9 +459,17 @@ if selected == "Dataset":
         - ma_7
     3. Tidak terdapat nilai kosong (missing value)
     4. Format tanggal menggunakan YYYY-MM-DD
-    Catatan: Dataset yang diunggah harus memiliki seluruh variabel yang digunakan oleh model. Dashboard tidak melakukan proses pembentukan fitur secara otomatis.
     
+    **Catatan**
+    Dataset yang diunggah harus sudah melalui proses *feature engineering*.
+    Dashboard tidak melakukan pembentukan variabel lag maupun moving average secara otomatis.
     """)
+
+    uploaded_file = st.file_uploader(
+        "Pilih file CSV",
+        type=["csv"]
+    )
+
     required_columns = [
         "hari_ke",
         "tanggal_lengkap",
@@ -464,49 +479,169 @@ if selected == "Dataset":
         "lag_7",
         "ma_7"
     ]
+
     if uploaded_file is not None:
-        df_upload = pd.read_csv(uploaded_file)
-        if all(col in df_upload.columns for col in required_columns):
-            st.success("✅ Struktur dataset sesuai.")
-        else:
-            st.error("❌ Kolom dataset tidak sesuai.")
-    if uploaded_file is not None:
-        st.subheader("Preview Dataset")
-        st.dataframe(
-            df_upload,
-            use_container_width=True
-        )
-    if uploaded_file is not None:
-        col1,col2,col3,col4 = st.columns(4)
-        with col1:
-            st.metric(
-                "Jumlah Data",
-                len(df_upload)
+
+        with st.spinner("Memproses dataset..."):
+
+            # ==========================
+            # Membaca Dataset
+            # ==========================
+
+            df_upload = pd.read_csv(
+                uploaded_file,
+                sep=";"
             )
-        with col2:
-            st.metric(
-                "Jumlah Kolom",
-                len(df_upload.columns)
+
+            # ==========================
+            # Validasi Kolom
+            # ==========================
+
+            missing_columns = [
+                col
+                for col in required_columns
+                if col not in df_upload.columns
+            ]
+
+            if missing_columns:
+
+                st.error(
+                    f"❌ Kolom berikut tidak ditemukan: {', '.join(missing_columns)}"
+                )
+
+                st.stop()
+
+            # ==========================
+            # Validasi Missing Value
+            # ==========================
+
+            if df_upload.isnull().values.any():
+
+                st.error(
+                    "❌ Dataset masih memiliki nilai kosong (missing value)."
+                )
+
+                st.stop()
+
+            # ==========================
+            # Validasi Format Tanggal
+            # ==========================
+
+            try:
+
+                df_upload["tanggal_lengkap"] = pd.to_datetime(
+                    df_upload["tanggal_lengkap"]
+                )
+
+            except:
+
+                st.error(
+                    "❌ Format kolom tanggal_lengkap tidak valid."
+                )
+
+                st.stop()
+
+            # ==========================
+            # Urutkan Dataset Upload
+            # ==========================
+
+            df_upload = (
+                df_upload
+                .sort_values("tanggal_lengkap")
+                .reset_index(drop=True)
             )
-        with col3:
-            st.metric(
-                "Tanggal Awal",
-                df_upload["tanggal_lengkap"].min()
+
+            # ==========================
+            # Preview Dataset
+            # ==========================
+
+            st.success("✅ Struktur dataset valid.")
+
+            st.subheader("Preview Dataset")
+
+            st.dataframe(
+                df_upload,
+                use_container_width=True
             )
-        with col4:
-            st.metric(
-                "Tanggal Akhir",
-                df_upload["tanggal_lengkap"].max()
-            )
-    
-    if st.button("🚀 Gunakan Dataset"):
-    
-        st.session_state["dataset"] = df_upload
-    
-        st.success("Dataset berhasil digunakan.")
-    if "dataset" not in st.session_state:
-    
-        st.session_state["dataset"] = df
+
+            # ==========================
+            # Informasi Dataset
+            # ==========================
+
+            col1, col2, col3, col4 = st.columns(4)
+
+            with col1:
+                st.metric(
+                    "Jumlah Data",
+                    len(df_upload)
+                )
+
+            with col2:
+                st.metric(
+                    "Jumlah Kolom",
+                    len(df_upload.columns)
+                )
+
+            with col3:
+                st.metric(
+                    "Tanggal Awal",
+                    df_upload["tanggal_lengkap"].min().strftime("%d-%m-%Y")
+                )
+
+            with col4:
+                st.metric(
+                    "Tanggal Akhir",
+                    df_upload["tanggal_lengkap"].max().strftime("%d-%m-%Y")
+                )
+
+            # ==========================
+            # Gunakan Dataset
+            # ==========================
+
+            if st.button("🚀 Gunakan Dataset"):
+
+                dataset_lama = st.session_state.dataset
+
+                dataset_lama["tanggal_lengkap"] = pd.to_datetime(
+                    dataset_lama["tanggal_lengkap"]
+                )
+
+                dataset_baru = pd.concat(
+                    [
+                        dataset_lama,
+                        df_upload
+                    ],
+                    ignore_index=True
+                )
+
+                dataset_baru = (
+                    dataset_baru
+                    .drop_duplicates(
+                        subset="tanggal_lengkap",
+                        keep="last"
+                    )
+                    .sort_values("tanggal_lengkap")
+                    .reset_index(drop=True)
+                )
+
+                st.session_state.dataset = dataset_baru
+
+                st.success(
+                    "✅ Dataset berhasil diperbarui."
+                )
+
+                st.info(f"""
+    Jumlah Data Aktif : **{len(dataset_baru)}**
+
+    Periode Dataset :
+
+    **{dataset_baru['tanggal_lengkap'].min().strftime('%d-%m-%Y')}**
+    s.d.
+    **{dataset_baru['tanggal_lengkap'].max().strftime('%d-%m-%Y')}**
+
+    Silakan buka menu **Prediksi**.
+    Periode tanggal akan otomatis mengikuti dataset terbaru.
+    """)
 
 # ==========================================
 # MENU VISUALISASI
@@ -660,6 +795,22 @@ if selected == "Prediksi":
 
     st.divider()
 
+    st.info(f"""
+    📅 Periode dataset aktif :
+    
+    **{min_date.strftime('%d-%m-%Y')}**
+    s.d.
+    **{max_date.strftime('%d-%m-%Y')}**
+    
+    Silakan pilih salah satu tanggal pada rentang tersebut untuk melakukan prediksi.
+    """)
+
+    # Menggunakan dataset aktif
+    df = st.session_state.dataset
+
+    # Pastikan kolom tanggal bertipe datetime
+    df["tanggal_lengkap"] = pd.to_datetime(df["tanggal_lengkap"])
+    
     min_date = df["tanggal_lengkap"].min().date()
     max_date = df["tanggal_lengkap"].max().date()
 
@@ -669,59 +820,36 @@ if selected == "Prediksi":
     min_value=min_date,
     max_value=max_date
 )
-    data = df[
-    df["tanggal_lengkap"].dt.date == tanggal
-]
+    data = df[df["tanggal_lengkap"].dt.date == tanggal]
     if data.empty:
-        st.error("Data untuk tanggal tersebut tidak tersedia.")
+        st.error("Data untuk tanggal tersebut belum tersedia.")
         st.stop()
 
     data = data.iloc[0]
-
     hari_ke = data["hari_ke"]
-
     lag1 = data["lag_1"]
-
     lag3 = data["lag_3"]
-
     lag7 = data["lag_7"]
-
     ma7 = data["ma_7"]
-
     aktual = data["cabe_rawit_merah"]
 
     st.subheader("📋 Variabel Model")
 
     variabel = pd.DataFrame({
-
         "Variabel":[
-
             "hari_ke",
-
             "lag_1",
-
             "lag_3",
-
             "lag_7",
-
             "MA7"
-
         ],
-
         "Nilai":[
-
             hari_ke,
-
             lag1,
-
             lag3,
-
             lag7,
-
             ma7
-
         ]
-
     })
 
     st.dataframe(
@@ -733,7 +861,7 @@ if selected == "Prediksi":
 
         with st.spinner("Sedang melakukan prediksi..."):
 
-            X = np.array([[
+            X_prediksi = np.array([[
 
                 hari_ke,
                 lag1,
@@ -801,75 +929,6 @@ Y=
 +
 1.078612(MA7)
 ''')
-
-df = st.session_state["dataset"]
-df_prediksi = st.session_state.dataset
-X_upload = df_prediksi[
-        "hari_ke",
-        "lag_1",
-        "lag_3",
-        "lag_7",
-        "ma_7"
-    ]
-
-prediksi = model.predict(X_upload)
-hasil = df_upload.copy()
-
-hasil["Prediksi"] = prediksi
-from sklearn.metrics import (
-    mean_squared_error,
-    mean_absolute_percentage_error,
-    r2_score
-)
-
-rmse = np.sqrt(
-    mean_squared_error(
-        hasil["cabe_rawit_merah"],
-        hasil["Prediksi"]
-    )
-)
-
-mape = mean_absolute_percentage_error(
-    hasil["cabe_rawit_merah"],
-    hasil["Prediksi"]
-) * 100
-
-r2 = r2_score(
-    hasil["cabe_rawit_merah"],
-    hasil["Prediksi"]
-)
-col1,col2,col3 = st.columns(3)
-
-with col1:
-    st.metric("RMSE",f"{rmse:,.2f}")
-
-with col2:
-    st.metric("MAPE",f"{mape:.2f}%")
-
-with col3:
-    st.metric("R²",f"{r2:.4f}")
-grafik = hasil[
-    [
-        "tanggal_lengkap",
-        "cabe_rawit_merah",
-        "Prediksi"
-    ]
-].set_index("tanggal_lengkap")
-
-st.line_chart(grafik)
-csv = hasil.to_csv(index=False).encode("utf-8")
-
-st.download_button(
-
-    "⬇ Download Hasil Prediksi",
-
-    csv,
-
-    file_name="hasil_prediksi.csv",
-
-    mime="text/csv"
-
-)
 
 st.info("""
 
