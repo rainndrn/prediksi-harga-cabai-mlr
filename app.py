@@ -339,15 +339,7 @@ Harga Cabai Rawit Merah
     st.subheader("ℹ️ Tentang Dashboard")
 
     st.info("""
-Dashboard ini merupakan implementasi model **Multiple Linear Regression** yang dibangun untuk memprediksi harga cabai rawit merah di Kabupaten Bekasi.
-Model menggunakan lima variabel independen yaitu:
-• hari_ke
-• lag-1
-• lag-3
-• lag-7
-• Moving Average 7 Hari (MA7)
-Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis yang diperlukan untuk membentuk variabel tersebut.
-Pengembangan selanjutnya dapat dilakukan dengan mengintegrasikan dashboard dengan sumber data harga harian sehingga pembentukan variabel historis dapat dilakukan secara otomatis.
+Dashboard ini merupakan implementasi model **Multiple Linear Regression** yang dibangun untuk memprediksi harga cabai rawit merah di Kabupaten Bekasi. Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis yang diperlukan untuk membentuk variabel tersebut. Pengembangan selanjutnya dapat dilakukan dengan mengintegrasikan dashboard dengan sumber data harga harian sehingga pembentukan variabel historis dapat dilakukan secara otomatis.
 """)
 
     df_home = st.session_state.dataset
@@ -949,28 +941,15 @@ if selected == "Tentang":
 
     st.title("ℹ️ Tentang")
 
-    st.markdown("""
-    <div class="card">
-
-    <h2 style="color:#d62828;">
-    🌶️ Prediksi Harga Cabai Rawit Merah
-    </h2>
-
-    Dashboard ini merupakan implementasi model
-    <b>Multiple Linear Regression</b>
-    untuk memprediksi harga cabai rawit merah
-    di Kabupaten Bekasi berdasarkan data historis.
-
-    </div>
-    """, unsafe_allow_html=True)
-
     st.subheader("👩‍🎓 Profil Peneliti")
 
     col1, col2 = st.columns([1,2])
 
     with col1:
-
-        st.markdown("## 👩")
+        st.image(
+            "assets/foto_raina.png",
+            width=220
+        )
 
     with col2:
 
@@ -1044,13 +1023,9 @@ Dashboard ini merupakan implementasi model penelitian.
 Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis yang diperlukan untuk membentuk variabel:
 
 • hari_ke
-
 • lag-1
-
 • lag-3
-
 • lag-7
-
 • MA7
 
 Dashboard belum dapat melakukan prediksi untuk tanggal di luar rentang data penelitian.
@@ -1066,11 +1041,8 @@ st.markdown(
     <center>
 
     © 2026
-
     Prediksi Harga Cabai Rawit Merah
-
     Multiple Linear Regression
-
     Universitas Bhayangkara Jakarta Raya
 
     </center>
