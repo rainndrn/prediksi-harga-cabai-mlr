@@ -434,6 +434,102 @@ if selected == "Dataset":
 
     )
 
+uploaded_file = st.file_uploader(
+    "📂 Upload Dataset Baru",
+    type=["csv"]
+)
+if uploaded_file is not None:
+
+    df_upload = pd.read_csv(uploaded_file)
+
+    st.success("Dataset berhasil diupload.")
+st.info("""
+
+### Ketentuan Dataset
+
+Dataset yang diunggah harus memenuhi persyaratan berikut:
+
+• Format file **CSV (.csv)**
+
+• Memiliki kolom:
+
+- hari_ke
+- tanggal_lengkap
+- cabe_rawit_merah
+- lag_1
+- lag_3
+- lag_7
+- ma_7
+
+• Tidak terdapat nilai kosong (missing value)
+
+• Format tanggal menggunakan YYYY-MM-DD
+
+""")
+required_columns = [
+
+    "hari_ke",
+
+    "tanggal_lengkap",
+
+    "cabe_rawit_merah",
+
+    "lag_1",
+
+    "lag_3",
+
+    "lag_7",
+
+    "ma_7"
+
+]
+if uploaded_file is not None:
+
+    df_upload = pd.read_csv(uploaded_file)
+
+    if all(col in df_upload.columns for col in required_columns):
+
+        st.success("✅ Struktur dataset sesuai.")
+
+    else:
+
+        st.error("❌ Kolom dataset tidak sesuai.")
+if uploaded_file is not None:
+
+    st.subheader("Preview Dataset")
+
+    st.dataframe(
+        df_upload,
+        use_container_width=True
+    )
+if uploaded_file is not None:
+
+    col1,col2,col3,col4 = st.columns(4)
+
+    with col1:
+        st.metric(
+            "Jumlah Data",
+            len(df_upload)
+        )
+
+    with col2:
+        st.metric(
+            "Jumlah Kolom",
+            len(df_upload.columns)
+        )
+
+    with col3:
+        st.metric(
+            "Tanggal Awal",
+            df_upload["tanggal_lengkap"].min()
+        )
+
+    with col4:
+        st.metric(
+            "Tanggal Akhir",
+            df_upload["tanggal_lengkap"].max()
+        )
+
 # ==========================================
 # MENU VISUALISASI
 # ==========================================
