@@ -859,7 +859,7 @@ if selected == "Prediksi":
 
         with st.spinner("Sedang melakukan prediksi..."):
 
-            X_prediksi = np.array([[
+            X = np.array([[
 
                 hari_ke,
                 lag1,
@@ -988,7 +988,7 @@ if selected == "Tentang":
         st.write("**NPM**")
         st.write("202210715283")
 
-        st.write("**Universitas**")
+        st.write("**Instansi**")
         st.write("Universitas Bhayangkara Jakarta Raya")
 
         st.write("**Program Studi**")
@@ -1024,13 +1024,9 @@ dengan variabel:
 
     st.write("""
 
-Sumber data:
+Sumber data: https://opendata.bekasikab.go.id/
 
-Open Data Kabupaten Bekasi
-
-Periode:
-
-2023–2025
+Periode: 2023–2025
 
 """)
 
@@ -1039,15 +1035,10 @@ Periode:
     st.write("""
 
 Dashboard dibuat menggunakan:
-
 - Python
-
 - Streamlit
-
 - Scikit-learn
-
 - Pandas
-
 - Matplotlib
 
 """)
@@ -1057,29 +1048,14 @@ Dashboard dibuat menggunakan:
     st.warning("""
 
 Dashboard ini merupakan implementasi model penelitian.
-
-Prediksi hanya dapat dilakukan pada tanggal yang
-memiliki data historis yang diperlukan untuk
-membentuk variabel:
-
+Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis yang diperlukan untuk membentuk variabel:
 • hari_ke
-
 • lag-1
-
 • lag-3
-
 • lag-7
-
 • MA7
-
-Dashboard belum dapat melakukan prediksi
-untuk tanggal di luar rentang data penelitian.
-
-Pengembangan lebih lanjut dapat dilakukan
-dengan mengintegrasikan dashboard dengan
-database harga harian sehingga proses
-feature engineering dapat dilakukan
-secara otomatis.
+Dashboard belum dapat melakukan prediksi untuk tanggal di luar rentang data penelitian.
+Pengembangan lebih lanjut dapat dilakukan dengan mengintegrasikan dashboard dengan database harga harian sehingga proses feature engineering dapat dilakukan secara otomatis.
 
 """)
     
