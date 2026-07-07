@@ -182,63 +182,60 @@ if selected == "Home":
         shuffle=False
     )
 
-# =========================
-# HEADER
-# =========================
+    # =========================
+    # HEADER
+    # =========================
 
-st.markdown(f"""
-<div class="card">
+    st.markdown(f"""
+    <div class="card">
 
-    <div class="big-font">
-        🌶️ Prediksi Harga Cabai Rawit Merah
+        <div class="big-font">
+            🌶️ Prediksi Harga Cabai Rawit Merah
+        </div>
+
+        <div class="sub-font" style="margin-top:10px;">
+            Dashboard implementasi <b>Multiple Linear Regression</b> untuk memprediksi
+            harga cabai rawit merah di Kabupaten Bekasi berdasarkan data historis.
+        </div>
+
+        <div style="margin-top:20px;">
+
+            <span style="
+                background:#d62828;
+                color:white;
+                padding:8px 16px;
+                border-radius:20px;
+                font-size:14px;
+                font-weight:600;
+                margin-right:8px;">
+                📅 Periode 2023–2025
+            </span>
+
+            <span style="
+                background:#f1f3f5;
+                color:#343a40;
+                padding:8px 16px;
+                border-radius:20px;
+                font-size:14px;
+                margin-right:8px;">
+                📊 {len(df)} Data
+            </span>
+    
+            <span style="
+                background:#f1f3f5;
+                color:#343a40;
+                padding:8px 16px;
+                border-radius:20px;
+                font-size:14px;">
+                🎯 Target: Harga Cabai Rawit Merah
+            </span>
     </div>
 
-    <div class="sub-font" style="margin-top:10px;">
-        Dashboard implementasi <b>Multiple Linear Regression</b> untuk memprediksi
-        harga cabai rawit merah di Kabupaten Bekasi berdasarkan data historis.
     </div>
+    """, unsafe_allow_html=True)
 
-    <div style="margin-top:20px;">
-
-        <span style="
-            background:#d62828;
-            color:white;
-            padding:8px 16px;
-            border-radius:20px;
-            font-size:14px;
-            font-weight:600;
-            margin-right:8px;">
-            📅 Periode 2023–2025
-        </span>
-
-        <span style="
-            background:#f1f3f5;
-            color:#343a40;
-            padding:8px 16px;
-            border-radius:20px;
-            font-size:14px;
-            margin-right:8px;">
-            📊 {len(df)} Data
-        </span>
-
-        <span style="
-            background:#f1f3f5;
-            color:#343a40;
-            padding:8px 16px;
-            border-radius:20px;
-            font-size:14px;">
-            🎯 Target: Harga Cabai Rawit Merah
-        </span>
-
-    </div>
-
-</div>
-""", unsafe_allow_html=True)
-
-st.write("")
-
+    st.write("")
     col1, col2, col3 = st.columns(3)
-
     with col1:
         st.metric(
             "📄 Jumlah Data",
