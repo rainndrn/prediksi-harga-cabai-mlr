@@ -51,6 +51,15 @@ df = load_data()
 st.markdown("""
 <style>
 
+.sticky-nav{
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 #MainMenu{
 visibility:hidden;
 }
@@ -137,10 +146,10 @@ border-left:5px solid red;
 # NAVBAR
 # ==========================================
 
+st.markdown('<div class="sticky-nav">', unsafe_allow_html=True)
+
 selected = option_menu(
-
     menu_title=None,
-
     options=[
         "Home",
         "Dataset",
@@ -161,7 +170,9 @@ selected = option_menu(
 
     default_index=0
 )
-    
+
+st.markdown("</div>", unsafe_allow_html=True)
+
 # ==========================================
 # HOME
 # ==========================================
