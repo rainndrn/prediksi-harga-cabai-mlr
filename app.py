@@ -193,11 +193,11 @@ if selected == "Home":
         </div>
 
         <div class="sub-font">
-                Dashboard implementasi model
-                <b style="color:#d62828;">
-                Multiple Linear Regression
-                </b>
-                untuk memprediksi harga cabai rawit merah di Kabupaten Bekasi berdasarkan data historis periode <b>2023–2025</b>.
+            Dashboard implementasi model
+            <b style="color:#d62828;">
+            Multiple Linear Regression
+            </b>
+            untuk memprediksi harga cabai rawit merah di Kabupaten Bekasi berdasarkan data historis periode <b>2023–2025</b>.
         </div>
     </div>
     """, unsafe_allow_html=True)
