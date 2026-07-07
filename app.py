@@ -859,15 +859,7 @@ if selected == "Prediksi":
 
         with st.spinner("Sedang melakukan prediksi..."):
 
-            X = np.array([[
-
-                hari_ke,
-                lag1,
-                lag3,
-                lag7,
-                ma7
-
-            ]])
+            X = np.array([[hari_ke, lag1, lag3, lag7, ma7]])
 
             prediksi = model.predict(X)[0]
 
@@ -896,7 +888,7 @@ if selected == "Prediksi":
     st.subheader("📊 Error Prediksi")
 
     error = aktual - prediksi
-    persen = abs(error)/aktual*100
+    ape = abs(error)/aktual*100
 
     col1,col2 = st.columns(2)
     with col1:
@@ -1048,13 +1040,21 @@ Dashboard dibuat menggunakan:
     st.warning("""
 
 Dashboard ini merupakan implementasi model penelitian.
+
 Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis yang diperlukan untuk membentuk variabel:
+
 • hari_ke
+
 • lag-1
+
 • lag-3
+
 • lag-7
+
 • MA7
+
 Dashboard belum dapat melakukan prediksi untuk tanggal di luar rentang data penelitian.
+
 Pengembangan lebih lanjut dapat dilakukan dengan mengintegrasikan dashboard dengan database harga harian sehingga proses feature engineering dapat dilakukan secara otomatis.
 
 """)
