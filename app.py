@@ -324,20 +324,18 @@ Harga Cabai Rawit Merah
     st.subheader("ℹ️ Tentang Dashboard")
 
     st.info("""
-Dashboard ini merupakan implementasi model **Multiple Linear Regression**
-yang dibangun untuk memprediksi harga cabai rawit merah di Kabupaten Bekasi.
+Dashboard ini merupakan implementasi model **Multiple Linear Regression** yang dibangun untuk memprediksi harga cabai rawit merah di Kabupaten Bekasi.
 Model menggunakan lima variabel independen yaitu:
 • hari_ke
 • lag-1
 • lag-3
 • lag-7
 • Moving Average 7 Hari (MA7)
-Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis
-yang diperlukan untuk membentuk variabel tersebut.
-Pengembangan selanjutnya dapat dilakukan dengan mengintegrasikan dashboard
-dengan sumber data harga harian sehingga pembentukan variabel historis dapat
-dilakukan secara otomatis.
+Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis yang diperlukan untuk membentuk variabel tersebut.
+Pengembangan selanjutnya dapat dilakukan dengan mengintegrasikan dashboard dengan sumber data harga harian sehingga pembentukan variabel historis dapat dilakukan secara otomatis.
 """)
+
+    df_home = st.session_state.dataset
     
 # ==========================================
 # MENU DATASET
@@ -429,14 +427,15 @@ if selected == "Dataset":
 # UPLOAD DATASET
 # ==========================================
     uploaded_file = st.file_uploader(
-    "📂 Upload Dataset Baru",
-    type=["csv"]
+        "📂 Upload Dataset Baru",
+        type=["csv"]
     )
     if uploaded_file is not None:
-    
         df_upload = pd.read_csv(uploaded_file)
-    
-        st.success("Dataset berhasil diupload.")
+        st.dataframe(df_upload)
+        if st.button("Gunakan Dataset"):
+            st.session_state.dataset = df_upload
+            st.success("Dataset berhasil diupload.")
     st.info("""
     
     ### Ketentuan Dataset
@@ -644,6 +643,8 @@ pembangunan model Multiple Linear Regression.
 
     )
 
+    df_visual = st.session_state.dataset
+
 # ==========================================
 # MENU PREDIKSI
 # ==========================================
@@ -802,8 +803,16 @@ Y=
 ''')
 
 df = st.session_state["dataset"]
-X_upload = df_upload[
+df_prediksi = st.session_state.dataset
+X_upload = df_prediksi[
     [
+        "hari_ke",
+        "lag_1",
+        "lag_3",
+        "lag_7",
+        "ma_7"
+    ]
+]
         "hari_ke",
         "lag_1",
         "lag_3",
