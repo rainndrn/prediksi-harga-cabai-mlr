@@ -186,7 +186,8 @@ if selected == "Home":
     # HEADER
     # =========================
 
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <div class="card">
 
         <div class="big-font">
@@ -232,7 +233,9 @@ if selected == "Home":
     </div>
 
     </div>
-    """, unsafe_allow_html=True)
+    """, 
+                unsafe_allow_html=True
+    )
 
     st.write("")
     col1, col2, col3 = st.columns(3)
