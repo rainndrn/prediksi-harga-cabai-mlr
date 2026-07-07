@@ -947,7 +947,7 @@ if selected == "Tentang":
 
     with col1:
         st.image(
-            "assets/foto_raina.JPG",
+            "assets/foto_raina.jpg",
             width=220
         )
 
