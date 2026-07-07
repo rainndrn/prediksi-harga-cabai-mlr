@@ -182,33 +182,58 @@ if selected == "Home":
         shuffle=False
     )
 
-    # =========================
-    # Header
-    # =========================
+# =========================
+# HEADER
+# =========================
 
-    st.markdown("""
-    <div class="card">
-        <div class="big-font">
-            🌶️ Prediksi Harga Cabai Rawit Merah
-        </div>
+st.markdown(f"""
+<div class="card">
 
-        <div style="margin-top:15px;">
-        <span style="background:#d62828;color:white;padding:6px 12px;border-radius:20px;">
-        🌶️ Multiple Linear Regression
-        </span>
-
-        <span style="background:#f8f9fa;padding:6px 12px;border-radius:20px;margin-left:8px;">
-        📅 2023–2025
-        </span>
-
-        <span style="background:#f8f9fa;padding:6px 12px;border-radius:20px;margin-left:8px;">
-        📊 1087 Data
-        </span>
-        </div>
-        
+    <div class="big-font">
+        🌶️ Prediksi Harga Cabai Rawit Merah
     </div>
-    """,
-                unsafe_allow_html=True)
+
+    <div class="sub-font" style="margin-top:10px;">
+        Dashboard implementasi <b>Multiple Linear Regression</b> untuk memprediksi
+        harga cabai rawit merah di Kabupaten Bekasi berdasarkan data historis.
+    </div>
+
+    <div style="margin-top:20px;">
+
+        <span style="
+            background:#d62828;
+            color:white;
+            padding:8px 16px;
+            border-radius:20px;
+            font-size:14px;
+            font-weight:600;
+            margin-right:8px;">
+            📅 Periode 2023–2025
+        </span>
+
+        <span style="
+            background:#f1f3f5;
+            color:#343a40;
+            padding:8px 16px;
+            border-radius:20px;
+            font-size:14px;
+            margin-right:8px;">
+            📊 {len(df)} Data
+        </span>
+
+        <span style="
+            background:#f1f3f5;
+            color:#343a40;
+            padding:8px 16px;
+            border-radius:20px;
+            font-size:14px;">
+            🎯 Target: Harga Cabai Rawit Merah
+        </span>
+
+    </div>
+
+</div>
+""", unsafe_allow_html=True)
 
     st.write("")
 
