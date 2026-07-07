@@ -930,26 +930,26 @@ Y=
 1.078612(MA7)
 ''')
 
-st.info("""
-
-**Catatan**
-
-Dashboard ini menggunakan model Multiple Linear Regression dengan
-variabel **hari_ke**, **lag-1**, **lag-3**, **lag-7**, dan
-**Moving Average 7 Hari (MA7)**.
-
-Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis
-yang diperlukan untuk membentuk variabel tersebut.
-
-Dashboard ini belum dapat melakukan prediksi pada tanggal di luar
-rentang data penelitian.
-
-Pengembangan lebih lanjut dapat dilakukan dengan mengintegrasikan
-dashboard dengan sumber data harga harian sehingga proses pembentukan
-variabel historis dapat dilakukan secara otomatis dan prediksi untuk
-hari berikutnya dapat dihasilkan.
-
-""")
+        st.info("""
+        
+        **Catatan**
+        
+        Dashboard ini menggunakan model Multiple Linear Regression dengan
+        variabel **hari_ke**, **lag-1**, **lag-3**, **lag-7**, dan
+        **Moving Average 7 Hari (MA7)**.
+        
+        Prediksi hanya dapat dilakukan pada tanggal yang memiliki data historis
+        yang diperlukan untuk membentuk variabel tersebut.
+        
+        Dashboard ini belum dapat melakukan prediksi pada tanggal di luar
+        rentang data penelitian.
+        
+        Pengembangan lebih lanjut dapat dilakukan dengan mengintegrasikan
+        dashboard dengan sumber data harga harian sehingga proses pembentukan
+        variabel historis dapat dilakukan secara otomatis dan prediksi untuk
+        hari berikutnya dapat dihasilkan.
+        
+        """)
 
 # ==========================================
 # MENU TENTANG
